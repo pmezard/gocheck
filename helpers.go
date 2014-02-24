@@ -11,8 +11,8 @@ import (
 
 // Return true if the currently running test has already failed.
 func (c *C) Failed() bool {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	return c.status == failedSt
 }
 
@@ -24,8 +24,8 @@ func (c *C) fail() {
 // previously logged so that the developer knows what went wrong. The higher
 // level helper functions will fail the test and do the logging properly.
 func (c *C) Fail() {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.fail()
 }
 
@@ -39,8 +39,8 @@ func (c *C) failNow() {
 // knows what went wrong. The higher level helper functions will fail the
 // test and do the logging properly.
 func (c *C) FailNow() {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.failNow()
 }
 
@@ -51,16 +51,16 @@ func (c *C) succeed() {
 // Mark the currently running test as succeeded, undoing any previous
 // failures.
 func (c *C) Succeed() {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.succeed()
 }
 
 // Mark the currently running test as succeeded, undoing any previous
 // failures, and stop running the test.
 func (c *C) SucceedNow() {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.succeed()
 	c.stopNow()
 }
@@ -75,8 +75,8 @@ func (c *C) ExpectFailure(reason string) {
 	if reason == "" {
 		panic("Missing reason why the test is expected to fail")
 	}
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.mustFail = true
 	c.reason = reason
 }
@@ -88,8 +88,8 @@ func (c *C) Skip(reason string) {
 	if reason == "" {
 		panic("Missing reason why the test is being skipped")
 	}
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.reason = reason
 	c.status = skippedSt
 	c.stopNow()
@@ -106,24 +106,24 @@ func (c *C) GetTestLog() string {
 // Log some information into the test error output.  The provided arguments
 // will be assembled together into a string using fmt.Sprint().
 func (c *C) Log(args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.log(args...)
 }
 
 // Log some information into the test error output.  The provided arguments
 // will be assembled together into a string using fmt.Sprintf().
 func (c *C) Logf(format string, args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.logf(format, args...)
 }
 
 // Output enables *C to be used as a logger in functions that require only
 // the minimum interface of *log.Logger.
 func (c *C) Output(calldepth int, s string) error {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	ns := time.Now().Sub(time.Time{}).Nanoseconds()
 	t := float64(ns%100e9) / 1e9
 	c.logf("[LOG] %.05f %s", t, s)
@@ -134,8 +134,8 @@ func (c *C) Output(calldepth int, s string) error {
 // The provided arguments will be assembled together into a string using
 // fmt.Sprint().
 func (c *C) Error(args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.logCaller(1)
 	c.logString(fmt.Sprint("Error: ", fmt.Sprint(args...)))
 	c.logNewLine()
@@ -146,8 +146,8 @@ func (c *C) Error(args ...interface{}) {
 // The provided arguments will be assembled together into a string using
 // fmt.Sprintf().
 func (c *C) Errorf(format string, args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.logCaller(1)
 	c.logString(fmt.Sprintf("Error: "+format, args...))
 	c.logNewLine()
@@ -158,8 +158,8 @@ func (c *C) Errorf(format string, args ...interface{}) {
 // stop the test execution. The provided arguments will be assembled
 // together into a string using fmt.Sprint().
 func (c *C) Fatal(args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.logCaller(1)
 	c.logString(fmt.Sprint("Error: ", fmt.Sprint(args...)))
 	c.logNewLine()
@@ -170,8 +170,8 @@ func (c *C) Fatal(args ...interface{}) {
 // stop the test execution. The provided arguments will be assembled
 // together into a string using fmt.Sprintf().
 func (c *C) Fatalf(format string, args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	c.logCaller(1)
 	c.logString(fmt.Sprint("Error: ", fmt.Sprintf(format, args...)))
 	c.logNewLine()
@@ -189,8 +189,8 @@ func (c *C) Fatalf(format string, args ...interface{}) {
 // the function will be logged next to the reported problem when the
 // matching fails.  This is a handy way to provide problem-specific hints.
 func (c *C) Check(obtained interface{}, checker Checker, args ...interface{}) bool {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	return c.internalCheck("Check", obtained, checker, args...)
 }
 
@@ -202,8 +202,8 @@ func (c *C) Check(obtained interface{}, checker Checker, args ...interface{}) bo
 // the function will be logged next to the reported problem when the
 // matching fails.  This is a handy way to provide problem-specific hints.
 func (c *C) Assert(obtained interface{}, checker Checker, args ...interface{}) {
-	c.Lock()
-	defer c.Unlock()
+	c.lock.Lock()
+	defer c.lock.Unlock()
 	if !c.internalCheck("Assert", obtained, checker, args...) {
 		c.stopNow()
 	}

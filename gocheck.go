@@ -80,7 +80,7 @@ type C struct {
 	// only live (and possibly access C) during tests duration. Benchmark
 	// methods are also not protected as locking may heavily influence the
 	// results and benchmarks are not expected to call C concurrently.
-	sync.Mutex
+	lock     sync.Mutex
 	method   *methodType
 	kind     funcKind
 	status   funcStatus
