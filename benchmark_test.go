@@ -55,7 +55,7 @@ func (s *BenchmarkS) TestBenchmark(c *C) {
 	c.Check(helper.calls[6], Equals, "TearDownTest")
 	// ... and more.
 
-	expected := "PASS: gocheck_test\\.go:[0-9]+: FixtureHelper\\.Benchmark1\t *100\t *[12][0-9]{5} ns/op\n"
+	expected := "PASS: gocheck_test\\.go:[0-9]+: FixtureHelper\\.Benchmark1\t *(20|100)\t *[12][0-9]{5,7} ns/op\n"
 	c.Assert(output.value, Matches, expected)
 }
 
@@ -70,6 +70,6 @@ func (s *BenchmarkS) TestBenchmarkBytes(c *C) {
 	}
 	Run(&helper, &runConf)
 
-	expected := "PASS: gocheck_test\\.go:[0-9]+: FixtureHelper\\.Benchmark2\t *100\t *[12][0-9]{5} ns/op\t *[4-9]\\.[0-9]{2} MB/s\n"
+	expected := "PASS: gocheck_test\\.go:[0-9]+: FixtureHelper\\.Benchmark2\t *(20|100)\t *[12][0-9]{5,7} ns/op\t *[1-9]\\.[0-9]{2} MB/s\n"
 	c.Assert(output.value, Matches, expected)
 }
