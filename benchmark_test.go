@@ -16,6 +16,7 @@ func (s *BenchmarkS) TestCountSuite(c *C) {
 }
 
 func (s *BenchmarkS) TestBasicTestTiming(c *C) {
+    c.Skip("unreliable results with other processes")
 	helper := FixtureHelper{sleepOn: "Test1", sleep: 1000000 * time.Nanosecond}
 	output := String{}
 	runConf := RunConf{Output: &output, Verbose: true}
@@ -27,6 +28,7 @@ func (s *BenchmarkS) TestBasicTestTiming(c *C) {
 }
 
 func (s *BenchmarkS) TestStreamTestTiming(c *C) {
+    c.Skip("unreliable results with other processes")
 	helper := FixtureHelper{sleepOn: "SetUpSuite", sleep: 1000000 * time.Nanosecond}
 	output := String{}
 	runConf := RunConf{Output: &output, Stream: true}
@@ -37,6 +39,7 @@ func (s *BenchmarkS) TestStreamTestTiming(c *C) {
 }
 
 func (s *BenchmarkS) TestBenchmark(c *C) {
+    c.Skip("unreliable results with other processes")
 	helper := FixtureHelper{sleep: 100000}
 	output := String{}
 	runConf := RunConf{
@@ -60,6 +63,7 @@ func (s *BenchmarkS) TestBenchmark(c *C) {
 }
 
 func (s *BenchmarkS) TestBenchmarkBytes(c *C) {
+    c.Skip("unreliable results with other processes")
 	helper := FixtureHelper{sleep: 100000}
 	output := String{}
 	runConf := RunConf{
