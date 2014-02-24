@@ -60,8 +60,8 @@ func (s *FixtureS) TestPanicOnTest(c *C) {
 		"  in FixtureHelper.trace\n" +
 		".*gocheck_test.go:[0-9]+\n" +
 		"  in FixtureHelper.Test1\n" +
-        "(.+\n)+" +
-        "$"
+		"(.+\n)+" +
+		"$"
 
 	c.Check(output.value, Matches, expected)
 }
@@ -86,7 +86,7 @@ func (s *FixtureS) TestPanicOnSetUpTest(c *C) {
 		"  in FixtureHelper.trace\n" +
 		".*gocheck_test.go:[0-9]+\n" +
 		"  in FixtureHelper.SetUpTest\n" +
-        "(.*\n)+" +
+		"(.*\n)+" +
 		"\n-+\n" +
 		"PANIC: gocheck_test\\.go:[0-9]+: " +
 		"FixtureHelper\\.Test1\n\n" +
@@ -117,13 +117,13 @@ func (s *FixtureS) TestPanicOnTearDownTest(c *C) {
 		"  in FixtureHelper.trace\n" +
 		".*gocheck_test.go:[0-9]+\n" +
 		"  in FixtureHelper.TearDownTest\n" +
-        "(.*\n)+" +
+		"(.*\n)+" +
 		"-+\n" +
 		"PANIC: gocheck_test\\.go:[0-9]+: " +
 		"FixtureHelper\\.Test1\n\n" +
 		"\\.\\.\\. Panic: Fixture has panicked " +
 		"\\(see related PANIC\\)\n" +
-        "$"
+		"$"
 
 	c.Check(output.value, Matches, expected)
 }
@@ -146,8 +146,8 @@ func (s *FixtureS) TestPanicOnSetUpSuite(c *C) {
 		"  in FixtureHelper.trace\n" +
 		".*gocheck_test.go:[0-9]+\n" +
 		"  in FixtureHelper.SetUpSuite\n" +
-        "(.+\n)+" +
-        "$"
+		"(.+\n)+" +
+		"$"
 
 	c.Check(output.value, Matches, expected)
 }
@@ -176,8 +176,8 @@ func (s *FixtureS) TestPanicOnTearDownSuite(c *C) {
 		"  in FixtureHelper.trace\n" +
 		".*gocheck_test.go:[0-9]+\n" +
 		"  in FixtureHelper.TearDownSuite\n" +
-        "(.*\n)+" +
-        "$"
+		"(.*\n)+" +
+		"$"
 
 	c.Check(output.value, Matches, expected)
 }
