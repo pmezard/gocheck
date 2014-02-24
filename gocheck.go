@@ -71,7 +71,16 @@ func (method *methodType) matches(re *regexp.Regexp) bool {
 		re.MatchString(method.String()))
 }
 
+// C exported helper methods can be called concurrently within the duration
+// of a single test. Tests must ensure their goroutines will not access C again
+// once they are finished.
 type C struct {
+	// The mutex protects write access from C exported methods. We assume non
+	// exported ones are only called by the framework, and that test goroutines
+	// only live (and possibly access C) during tests duration. Benchmark
+	// methods are also not protected as locking may heavily influence the
+	// results and benchmarks are not expected to call C concurrently.
+	sync.Mutex
 	method   *methodType
 	kind     funcKind
 	status   funcStatus
